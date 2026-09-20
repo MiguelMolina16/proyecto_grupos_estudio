@@ -37,6 +37,7 @@
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
 
+        
         <!--  JPA/Hibernate ORM -->
         <dependency>
             <groupId>io.quarkus</groupId>
