@@ -5,86 +5,95 @@ import 'dart:async';
 import '../../modelos/usuario.dart';
 
 class ServiciosApi {
-  final String apiUrl = 'http://localhost:8862/api/propietarios/autenticar';
+  final String apiUrl = 'http://localhost:8620/kick';
 
-  FutureOr<Propietario?> autenticarUsuario(String usuario, String clave) async {
-    print('datos recibidos : $usuario clave $clave');
-    if (usuario.isEmpty || clave.isEmpty) {
+  FutureOr<Usuario?> autenticarUsuario(
+      String email, String password) async {
+    print('datos recibidos : $email clave $password');
+
+    if (email.isEmpty || password.isEmpty) {
       print('Error al enviar datos');
       return null;
     }
-    final url = Uri.parse(apiUrl);
 
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'nombreUsuario': usuario,
-        'clave': clave,
-      }),
-    );
+    final url = Uri.parse('$apiUrl/usuarios/autenticar');
 
-    if (response.statusCode == 200) {
-      // Si la solicitud fue exitosa, procesa la respuesta
-      print('Autenticación exitosa: ${response.body}');
-      try {
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      print('Código de respuesta: ${response.statusCode}');
+      print('Respuesta: ${response.body}');
+
+      if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        return Propietario.fromJson(jsonResponse);
-      } catch (e) {
-        print('Error al decodificar el JSON: $e');
+        return Usuario.fromJson(jsonResponse);
+      } else {
+        print('Error en la autenticación: ${response.statusCode}');
         return null;
       }
-    } else {
-      // Si la solicitud falló, maneja el error
-      print('Error en la autenticación: ${response.statusCode}');
+    } catch (e) {
+      print('Error al conectar con el servidor: $e');
       return null;
     }
   }
 
-  FutureOr<void> crear(String usuario, String clave, String codigo,
-      String nombrecompleto) async {
-    print('datos recibidos : $usuario clave $clave');
-    if (usuario.isEmpty || clave.isEmpty) {
-      print('Error al enviar datos');
-      return;
-    }
-    final url = Uri.parse("http://localhost:8862/api/propietarios/");
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'nombreUsuario': usuario,
-        'clave': clave,
-        'codigo': codigo,
-        'nombreCompleto': nombrecompleto
-      }),
-    );
+  FutureOr<void> crear(
+    String nombres,
+    String apellidos,
+    String email,
+    String password,
+    String rol,
+  ) async {
+    print('Registrando usuario: $email');
 
-    if (response.statusCode == 200) {
-      // Si la solicitud fue exitosa, procesa la respuesta
-      print('Autenticación exitosa: ${response.body}');
-    } else {
-      // Si la solicitud falló, maneja el error
-      print('Error en la autenticación: ${response.statusCode}');
+    final url = Uri.parse('$apiUrl/usuarios');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'nombres': nombres,
+          'apellidos': apellidos,
+          'email': email,
+          'password': password,
+          'rol': rol,
+        }),
+      );
+
+      print('Código de respuesta: ${response.statusCode}');
+      print('Respuesta: ${response.body}');
+    } catch (e) {
+      print('Error al conectar con el servidor: $e');
     }
   }
 
   FutureOr<void> consultar() async {
-    final url = Uri.parse("http://localhost:8862/api/propietarios/");
-    final response = await http.get(url, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
+    final url = Uri.parse('$apiUrl/usuarios');
 
-    if (response.statusCode == 200) {
-      // Si la solicitud fue exitosa, procesa la respuesta
-      print('Autenticación exitosa: ${response.body}');
-    } else {
-      // Si la solicitud falló, maneja el error
-      print('Error en la autenticación: ${response.statusCode}');
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      print('Código de respuesta: ${response.statusCode}');
+      print('Respuesta: ${response.body}');
+    } catch (e) {
+      print('Error al conectar con el servidor: $e');
     }
   }
 }

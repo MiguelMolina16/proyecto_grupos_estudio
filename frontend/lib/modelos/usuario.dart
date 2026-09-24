@@ -1,20 +1,25 @@
-class Propietario {
-  final int codigo;
-  final String nombreCompleto;
-  final String nombreUsuario;
-  final String clave;
-  Propietario({
-    required this.codigo,
-    required this.nombreCompleto,
-    required this.nombreUsuario,
-    required this.clave,
+class Usuario {
+  final String id;
+  final String nombres;
+  final String apellidos;
+  final String email;
+  final String rol;
+
+  Usuario({
+    required this.id,
+    required this.nombres,
+    required this.apellidos,
+    required this.email,
+    required this.rol,
   });
-  factory Propietario.fromJson(Map<String, dynamic> json) {
-    return Propietario(
-      codigo: json['codigo'],
-      nombreCompleto: json['nombreCompleto'],
-      nombreUsuario: json['nombreUsuario'],
-      clave: json['clave'],
+
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      id: json['usuId'].toString(),
+      nombres: json['usuNombres'],
+      apellidos: json['usuApellidos'],
+      email: json['usuEmail'],
+      rol: json['usuRol'],
     );
   }
 }
