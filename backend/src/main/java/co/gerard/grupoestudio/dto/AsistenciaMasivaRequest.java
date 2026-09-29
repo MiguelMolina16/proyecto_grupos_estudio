@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public class AsistenciaMasivaRequest {
     public UUID reuId;
-    public List<UUID> estIds;
+    public List<UUID> usuIds;
 }

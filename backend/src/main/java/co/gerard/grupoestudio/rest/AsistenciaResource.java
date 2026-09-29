@@ -3,8 +3,8 @@ package co.gerard.grupoestudio.rest;
 import co.gerard.grupoestudio.dto.AsistenciaMasivaRequest;
 import co.gerard.grupoestudio.evento.AsistenciaRegistradaEvent;
 import co.gerard.grupoestudio.modelo.asistencia.Asistencia;
-import co.gerard.grupoestudio.modelo.estudiante.Estudiante;
-import co.gerard.grupoestudio.modelo.relacion.EstudianteGrupo;
+import co.gerard.grupoestudio.modelo.usuario.Usuario;
+import co.gerard.grupoestudio.modelo.relacion.UsuarioGrupo;
 import co.gerard.grupoestudio.modelo.reunion.Reunion;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -40,89 +40,73 @@ public class AsistenciaResource {
         return a;
     }
 
-    /**
-     * GET que devuelve los estudiantes que pueden asistir a una reunión
-     * (los integrantes del grupo de esa reunión).
-     */
     @GET
     @Path("/reunion/{reuId}/integrantes")
-    public List<Estudiante> integrantesDeReunion(@PathParam("reuId") UUID reuId) {
+    public List<Usuario> integrantesDeReunion(@PathParam("reuId") UUID reuId) {
         Reunion reunion = Reunion.findById(reuId);
         if (reunion == null) throw new NotFoundException("Reunión no encontrada");
 
-        List<EstudianteGrupo> relaciones = EstudianteGrupo.buscarPorGrupo(reunion.gruId);
-        List<Estudiante> integrantes = new ArrayList<>();
-        for (EstudianteGrupo eg : relaciones) {
-            Estudiante e = Estudiante.findById(eg.estId);
-            if (e != null) integrantes.add(e);
+        List<UsuarioGrupo> relaciones = UsuarioGrupo.buscarPorGrupo(reunion.gruId);
+        List<Usuario> integrantes = new ArrayList<>();
+        for (UsuarioGrupo ug : relaciones) {
+            Usuario u = Usuario.findById(ug.usuId);
+            if (u != null) integrantes.add(u);
         }
         return integrantes;
     }
 
-    /**
-     * POST masivo: registra la asistencia de uno o varios integrantes a una reunión.
-     */
     @POST
     @Transactional
     public List<Asistencia> registrar(AsistenciaMasivaRequest request) {
 
-        // 1. Validar entrada básica
         if (request.reuId == null) {
             throw new BadRequestException("reuId es obligatorio");
         }
-        if (request.estIds == null || request.estIds.isEmpty()) {
-            throw new BadRequestException("Debe indicar al menos un estudiante");
+        if (request.usuIds == null || request.usuIds.isEmpty()) {
+            throw new BadRequestException("Debe indicar al menos un usuario");
         }
 
-        // 2. Verificar que la reunión existe
         Reunion reunion = Reunion.findById(request.reuId);
         if (reunion == null) {
             throw new BadRequestException("La reunión no existe");
         }
 
-        // 3. Validar pertenencia al grupo y duplicados
         List<Asistencia> creadas = new ArrayList<>();
-        for (UUID estId : request.estIds) {
+        for (UUID usuId : request.usuIds) {
 
-            // 3a. Estudiante existe
-            Estudiante est = Estudiante.findById(estId);
-            if (est == null) {
-                throw new BadRequestException("El estudiante " + estId + " no existe");
+            Usuario usu = Usuario.findById(usuId);
+            if (usu == null) {
+                throw new BadRequestException("El usuario " + usuId + " no existe");
             }
 
-            // 3b. Pertenencia al grupo de la reunión
-            EstudianteGrupo pertenece = EstudianteGrupo.buscarPorId(estId, reunion.gruId);
+            UsuarioGrupo pertenece = UsuarioGrupo.buscarPorId(usuId, reunion.gruId);
             if (pertenece == null) {
                 throw new BadRequestException(
-                    "El estudiante " + est.estNombres + " " + est.estApellidos +
+                    "El usuario " + usu.usuNombres + " " + usu.usuApellidos +
                     " no pertenece al grupo de esta reunión"
                 );
             }
 
-            // 3c. Duplicado
             Asistencia existente = Asistencia.find(
-                "reuId = ?1 and estId = ?2", request.reuId, estId
+                "reuId = ?1 and usuId = ?2", request.reuId, usuId
             ).firstResult();
             if (existente != null) {
                 throw new BadRequestException(
-                    "El estudiante " + est.estNombres + " " + est.estApellidos +
+                    "El usuario " + usu.usuNombres + " " + usu.usuApellidos +
                     " ya tiene asistencia registrada en esta reunión"
                 );
             }
 
-            // 3d. Crear y persistir
             Asistencia nueva = new Asistencia();
             nueva.reuId = request.reuId;
-            nueva.estId = estId;
+            nueva.usuId = usuId;
             nueva.asiCreacion = LocalDateTime.now();
             nueva.persist();
             creadas.add(nueva);
         }
 
-        // 4. Disparar evento "Asistencia registrada"
-        eventoAsistencia.fire(new AsistenciaRegistradaEvent(request.reuId, request.estIds));
+        eventoAsistencia.fire(new AsistenciaRegistradaEvent(request.reuId, request.usuIds));
 
-        // 5. Devolver las asistencias creadas
         return creadas;
     }
 }

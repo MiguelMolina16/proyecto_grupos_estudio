@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../modelos/estudiante.dart';
+import '../modelos/usuario.dart';
 import '../modelos/reunion.dart';
 import 'utilapi/ServiciosGestion.dart';
 
@@ -15,7 +15,7 @@ class _AsistenciaState extends State<Asistencia> {
 
   List<Reunion> _reuniones = [];
   Reunion? _reunionSel;
-  List<Estudiante> _integrantes = [];
+  List<Usuario> _integrantes = [];
   final Set<String> _seleccionados = {};
 
   bool _cargandoReuniones = true;
@@ -128,11 +128,11 @@ class _AsistenciaState extends State<Asistencia> {
                         : ListView.builder(
                             itemCount: _integrantes.length,
                             itemBuilder: (ctx, i) {
-                              final e = _integrantes[i];
-                              final id = e.estId!;
+                              final u = _integrantes[i];
+                              final id = u.usuId!;
                               return CheckboxListTile(
-                                title: Text(e.nombreCompleto),
-                                subtitle: Text(e.estEmail ?? ''),
+                                title: Text(u.nombreCompleto),
+                                subtitle: Text(u.usuEmail ?? ''),
                                 value: _seleccionados.contains(id),
                                 onChanged: (v) => setState(() {
                                   if (v == true) {
