@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "estudiantes_grupos")
-@IdClass(EstudianteGrupoId.class)
-public class EstudianteGrupo extends PanacheEntityBase {
+@Table(name = "usuarios_grupos")
+@IdClass(UsuarioGrupoId.class)
+public class UsuarioGrupo extends PanacheEntityBase {
 
     @Id
-    @Column(name = "est_id")
-    public UUID estId;
+    @Column(name = "usu_id")
+    public UUID usuId;
 
     @Id
     @Column(name = "gru_id")
@@ -25,15 +25,15 @@ public class EstudianteGrupo extends PanacheEntityBase {
     @Column(name = "rol", length = 50)
     public String rol;
 
-    public static EstudianteGrupo buscarPorId(UUID estId, UUID gruId) {
-        return find("estId = ?1 and gruId = ?2", estId, gruId).firstResult();
+    public static UsuarioGrupo buscarPorId(UUID usuId, UUID gruId) {
+        return find("usuId = ?1 and gruId = ?2", usuId, gruId).firstResult();
     }
 
-    public static List<EstudianteGrupo> buscarPorGrupo(UUID gruId) {
+    public static List<UsuarioGrupo> buscarPorGrupo(UUID gruId) {
         return list("gruId", gruId);
     }
 
-    public static List<EstudianteGrupo> buscarPorEstudiante(UUID estId) {
-        return list("estId", estId);
+    public static List<UsuarioGrupo> buscarPorUsuario(UUID usuId) {
+        return list("usuId", usuId);
     }
 }
