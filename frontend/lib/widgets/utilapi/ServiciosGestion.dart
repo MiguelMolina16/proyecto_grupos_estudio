@@ -8,7 +8,8 @@ import '../../modelos/tarea.dart';
 import '../../modelos/estadistica.dart';
 
 class ServiciosGestion {
-  final String apiUrl = 'http://localhost:8620/kick';
+  //final String apiUrl = 'http://localhost:8620/kick';
+  final String apiUrl = 'https://proyectogruposestudio-production.up.railway.app/kick';
 
   FutureOr<List<Reunion>> getReuniones() async {
     final url = Uri.parse('$apiUrl/reuniones');
