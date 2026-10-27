@@ -1,3 +1,4 @@
+
 package co.gerard.grupoestudio.modelo.usuario;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -23,23 +24,23 @@ public class Usuario extends PanacheEntityBase {
     public UUID usuId;
 
     @NotBlank
-    @Column(name = "usu_nombres", nullable = false)
+    @Column(name = "usu_nombres", nullable = false, length = 50)
     public String usuNombres;
 
     @NotBlank
-    @Column(name = "usu_apellidos", nullable = false)
+    @Column(name = "usu_apellidos", nullable = false, length = 50)
     public String usuApellidos;
 
     @NotBlank
     @Email
-    @Column(name = "usu_email")
+    @Column(name = "usu_email", length = 100)
     public String usuEmail;
 
     @Column(name = "usu_creacion")
     public LocalDateTime usuCreacion;
 
     @NotBlank
-    @Column(name = "usu_rol", nullable = false)
+    @Column(name = "usu_rol", nullable = false, length = 50)
     public String usuRol;
 
     public static Usuario findById(UUID id) {

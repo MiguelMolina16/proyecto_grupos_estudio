@@ -1,5 +1,6 @@
+
 import 'package:flutter/material.dart';
-import '../modelos/estudiante.dart';
+import '../modelos/usuario.dart';
 import '../modelos/reunion.dart';
 import 'utilapi/ServiciosGestion.dart';
 
@@ -15,7 +16,7 @@ class _AsistenciaState extends State<Asistencia> {
 
   List<Reunion> _reuniones = [];
   Reunion? _reunionSel;
-  List<Estudiante> _integrantes = [];
+  List<Usuario> _integrantes = [];
 
   final Set<String> _seleccionados = {};
 
@@ -46,10 +47,7 @@ class _AsistenciaState extends State<Asistencia> {
         _cargandoReuniones = false;
       });
 
-      _msg(
-        'No se pudieron cargar las reuniones.',
-        false,
-      );
+      _msg('No se pudieron cargar las reuniones.', false);
     }
   }
 
@@ -81,27 +79,18 @@ class _AsistenciaState extends State<Asistencia> {
         _cargandoIntegrantes = false;
       });
 
-      _msg(
-        'No se pudieron cargar los integrantes.',
-        false,
-      );
+      _msg('No se pudieron cargar los integrantes.', false);
     }
   }
 
   Future<void> _registrar() async {
     if (_reunionSel == null) {
-      _msg(
-        'Selecciona una reunión.',
-        false,
-      );
+      _msg('Selecciona una reunión.', false);
       return;
     }
 
     if (_seleccionados.isEmpty) {
-      _msg(
-        'Selecciona al menos un integrante.',
-        false,
-      );
+      _msg('Selecciona al menos un integrante.', false);
       return;
     }
 
@@ -118,27 +107,18 @@ class _AsistenciaState extends State<Asistencia> {
       if (!mounted) return;
 
       if (resultado == 'OK') {
-        _msg(
-          'Asistencia registrada correctamente.',
-          true,
-        );
+        _msg('Asistencia registrada correctamente.', true);
 
         setState(() {
           _seleccionados.clear();
         });
       } else {
-        _msg(
-          resultado,
-          false,
-        );
+        _msg(resultado, false);
       }
     } catch (e) {
       if (!mounted) return;
 
-      _msg(
-        'No se pudo registrar la asistencia.',
-        false,
-      );
+      _msg('No se pudo registrar la asistencia.', false);
     } finally {
       if (mounted) {
         setState(() {
@@ -154,9 +134,8 @@ class _AsistenciaState extends State<Asistencia> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensaje),
-        backgroundColor: correcto
-            ? Colors.green
-            : const Color(0xFFDC2626),
+        backgroundColor:
+            correcto ? Colors.green : const Color(0xFFDC2626),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(
@@ -174,87 +153,67 @@ class _AsistenciaState extends State<Asistencia> {
       );
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 850,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _encabezado(),
-
-                  const SizedBox(height: 20),
-
-                  _tarjetaReunion(),
-
-                  const SizedBox(height: 20),
-
-                  _tarjetaIntegrantes(),
-
-                  const SizedBox(height: 20),
-
-                  _botonRegistrar(),
-                ],
-              ),
-            ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 850),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _encabezado(),
+              const SizedBox(height: 20),
+              _tarjetaReunion(),
+              const SizedBox(height: 20),
+              _tarjetaIntegrantes(),
+              const SizedBox(height: 20),
+              _botonRegistrar(),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   Widget _encabezado() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Row(
-          children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8F0FE),
-                borderRadius: BorderRadius.circular(14),
+        Container(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            color: const Color(0xFFE8F0FE),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: const Icon(
+            Icons.fact_check_outlined,
+            color: Color(0xFF2563EB),
+            size: 28,
+          ),
+        ),
+        const SizedBox(width: 14),
+        const Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Registrar asistencia',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F2937),
+                ),
               ),
-              child: const Icon(
-                Icons.fact_check_outlined,
-                color: Color(0xFF2563EB),
-                size: 28,
+              SizedBox(height: 4),
+              Text(
+                'Selecciona una reunión y marca los integrantes presentes.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF6B7280),
+                ),
               ),
-            ),
-
-            const SizedBox(width: 14),
-
-            const Expanded(
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Registrar asistencia',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F2937),
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Selecciona una reunión y marca los integrantes presentes.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -288,32 +247,25 @@ class _AsistenciaState extends State<Asistencia> {
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
             DropdownButtonFormField<Reunion>(
               decoration: const InputDecoration(
                 labelText: 'Selecciona una reunión',
-                prefixIcon: Icon(
-                  Icons.event_outlined,
-                ),
+                prefixIcon: Icon(Icons.event_outlined),
               ),
               value: _reunionSel,
               isExpanded: true,
-              items: _reuniones.map(
-                (reunion) {
-                  return DropdownMenuItem<Reunion>(
-                    value: reunion,
-                    child: Text(
-                      reunion.etiqueta,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                },
-              ).toList(),
-              onChanged: _cargandoIntegrantes
-                  ? null
-                  : _selReunion,
+              items: _reuniones.map((reunion) {
+                return DropdownMenuItem<Reunion>(
+                  value: reunion,
+                  child: Text(
+                    reunion.etiqueta,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }).toList(),
+              onChanged:
+                  _cargandoIntegrantes ? null : _selReunion,
             ),
           ],
         ),
@@ -338,9 +290,7 @@ class _AsistenciaState extends State<Asistencia> {
                   size: 22,
                   color: Color(0xFF2563EB),
                 ),
-
                 const SizedBox(width: 10),
-
                 const Expanded(
                   child: Text(
                     'Integrantes',
@@ -351,7 +301,6 @@ class _AsistenciaState extends State<Asistencia> {
                     ),
                   ),
                 ),
-
                 if (_reunionSel != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -373,18 +322,16 @@ class _AsistenciaState extends State<Asistencia> {
                   ),
               ],
             ),
-
             const SizedBox(height: 16),
-
-            if (_reunionSel == null)
-              _estadoInicial()
-            else if (_cargandoIntegrantes)
+            if (_cargandoIntegrantes)
               const Padding(
                 padding: EdgeInsets.all(30),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
               )
+            else if (_reunionSel == null)
+              _estadoInicial()
             else if (_integrantes.isEmpty)
               _sinIntegrantes()
             else
@@ -473,64 +420,64 @@ class _AsistenciaState extends State<Asistencia> {
 
   Widget _listaIntegrantes() {
     return Column(
-      children: _integrantes.map(
-        (estudiante) {
-          final id = estudiante.estId!;
+      children: _integrantes.map((integrante) {
+        final id = integrante.usuId;
 
-          final seleccionado =
-              _seleccionados.contains(id);
+        if (id == null || id.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
+        final seleccionado = _seleccionados.contains(id);
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+            color: seleccionado
+                ? const Color(0xFFEFF6FF)
+                : const Color(0xFFF9FAFB),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
               color: seleccionado
-                  ? const Color(0xFFEFF6FF)
-                  : const Color(0xFFF9FAFB),
+                  ? const Color(0xFFBFDBFE)
+                  : const Color(0xFFE5E7EB),
+            ),
+          ),
+          child: CheckboxListTile(
+            value: seleccionado,
+            onChanged: (valor) {
+              setState(() {
+                if (valor == true) {
+                  _seleccionados.add(id);
+                } else {
+                  _seleccionados.remove(id);
+                }
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 2,
+            ),
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: seleccionado
-                    ? const Color(0xFFBFDBFE)
-                    : const Color(0xFFE5E7EB),
+            ),
+            title: Text(
+              integrante.nombreCompleto,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1F2937),
               ),
             ),
-            child: CheckboxListTile(
-              value: seleccionado,
-              onChanged: (valor) {
-                setState(() {
-                  if (valor == true) {
-                    _seleccionados.add(id);
-                  } else {
-                    _seleccionados.remove(id);
-                  }
-                });
-              },
-              controlAffinity:
-                  ListTileControlAffinity.leading,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              title: Text(
-                estudiante.nombreCompleto,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1F2937),
-                ),
-              ),
-              subtitle: Text(
-                estudiante.estEmail ?? 'Sin correo registrado',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
+            subtitle: Text(
+              integrante.usuEmail ?? 'Sin correo registrado',
+              style: const TextStyle(
+                fontSize: 13,
+                color: Color(0xFF6B7280),
               ),
             ),
-          );
-        },
-      ).toList(),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -550,9 +497,7 @@ class _AsistenciaState extends State<Asistencia> {
                 color: Colors.white,
               ),
             )
-          : const Icon(
-              Icons.save_outlined,
-            ),
+          : const Icon(Icons.save_outlined),
       label: Text(
         _enviando
             ? 'Registrando asistencia...'

@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class AsistenciaRegistradaEvent {
-    public final UUID reuId;
-    public final List<UUID> estIds;
+    public UUID reuId;
+    public List<UUID> usuIds;
 
-    public AsistenciaRegistradaEvent(UUID reuId, List<UUID> estIds) {
+    public AsistenciaRegistradaEvent(UUID reuId, List<UUID> usuIds) {
         this.reuId = reuId;
-        this.estIds = estIds;
+        this.usuIds = usuIds;
     }
 }

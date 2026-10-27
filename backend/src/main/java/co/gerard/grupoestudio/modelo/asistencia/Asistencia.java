@@ -22,16 +22,12 @@ public class Asistencia extends PanacheEntityBase {
     @Column(name = "reu_id", nullable = false)
     public UUID reuId;
 
-    @Column(name = "est_id", nullable = false)
-    public UUID estId;
+    @Column(name = "usu_id", nullable = false)
+    public UUID usuId;
 
     @Column(name = "asi_creacion")
     public LocalDateTime asiCreacion;
 
-    // CLAVE ÚNICA para evitar duplicados (meeting_id, student_id)
-    // En PostgreSQL se maneja con CONSTRAINT UNIQUE explícito en el SQL
-
-    // Método estático tipado
     public static Asistencia findById(UUID id) {
         return find("asiId", id).firstResult();
     }
