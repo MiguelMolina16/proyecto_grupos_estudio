@@ -1,3 +1,4 @@
+
 class Usuario {
   final String? usuId;
   final String usuNombres;
@@ -13,13 +14,23 @@ class Usuario {
     this.usuRol,
   });
 
-  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        usuId: json['usuId'],
-        usuNombres: json['usuNombres'] ?? '',
-        usuApellidos: json['usuApellidos'] ?? '',
-        usuEmail: json['usuEmail'],
-        usuRol: json['usuRol'],
-      );
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      usuId: json['usuId']?.toString(),
+      usuNombres: json['usuNombres']?.toString() ?? '',
+      usuApellidos: json['usuApellidos']?.toString() ?? '',
+      usuEmail: json['usuEmail']?.toString(),
+      usuRol: json['usuRol']?.toString(),
+    );
+  }
 
   String get nombreCompleto => '$usuNombres $usuApellidos';
+
+  // Alias para mantener compatibilidad con el código
+  // que utiliza los nombres anteriores del modelo.
+  String get id => usuId ?? '';
+  String get nombres => usuNombres;
+  String get apellidos => usuApellidos;
+  String get email => usuEmail ?? '';
+  String get rol => usuRol ?? '';
 }

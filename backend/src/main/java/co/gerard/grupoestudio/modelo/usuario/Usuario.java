@@ -1,3 +1,4 @@
+
 package co.gerard.grupoestudio.modelo.usuario;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -7,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,18 +23,23 @@ public class Usuario extends PanacheEntityBase {
     @Column(name = "usu_id")
     public UUID usuId;
 
+    @NotBlank
     @Column(name = "usu_nombres", nullable = false, length = 50)
     public String usuNombres;
 
+    @NotBlank
     @Column(name = "usu_apellidos", nullable = false, length = 50)
     public String usuApellidos;
 
+    @NotBlank
+    @Email
     @Column(name = "usu_email", length = 100)
     public String usuEmail;
 
     @Column(name = "usu_creacion")
     public LocalDateTime usuCreacion;
 
+    @NotBlank
     @Column(name = "usu_rol", nullable = false, length = 50)
     public String usuRol;
 

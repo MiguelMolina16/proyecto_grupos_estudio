@@ -1,48 +1,81 @@
+
 import 'package:flutter/material.dart';
-import 'package:proyecto_grupos_estudio/widgets/asistencia.dart';
-// import 'package:proyecto_grupos_estudio/widgets/grupo.dart'; // Comentado porque es de otra HU
-import 'package:proyecto_grupos_estudio/widgets/estadisticas_tareas.dart';
+import 'package:proyecto_grupos_estudio/pantallaprincipal.dart';
 
-void main() => runApp(const Aplicacion());
-
-class Aplicacion extends StatefulWidget {
-  const Aplicacion({super.key});
-
-  @override
-  State<Aplicacion> createState() => _AplicacionState();
+void main() {
+  runApp(const Aplicacion());
 }
 
-class _AplicacionState extends State<Aplicacion> {
-  int _index = 0;
+class Aplicacion extends StatelessWidget {
+  const Aplicacion({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Gestion Docente",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(_index == 0
-              ? "HU005 - Registrar Asistencia"
-              : "HU028 - Tareas y Estadísticas"), // Título ajustado a las 2 pestañas actuales
-          backgroundColor: Colors.blue,
+      title: 'Gestión de Estudio',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2563EB),
+          brightness: Brightness.light,
         ),
-        body: _index == 0
-            ? const Asistencia()
-            // : _index == 1
-            //     ? const GrupoWidget() // Comentado porque es de otra HU
-            //     : const EstadisticasTareasWidget(),
-            : const EstadisticasTareasWidget(),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _index,
-          onTap: (i) => setState(() => _index = i),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.how_to_reg), label: 'Asistencia'),
-            // BottomNavigationBarItem(icon: Icon(Icons.group_add), label: 'Grupos'), // Comentado
-            BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Tareas/Stats'),
-          ],
+        scaffoldBackgroundColor: const Color(0xFFF5F7FA),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xFF1F2937),
+          elevation: 0,
+          centerTitle: false,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            borderSide: BorderSide(
+              color: Color(0xFF2563EB),
+              width: 2,
+            ),
+          ),
+        ),
+        cardTheme: const CardTheme(
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: Colors.white,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(50),
+            backgroundColor: const Color(0xFF2563EB),
+            foregroundColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
         ),
       ),
+      home: const PantallaInicial(),
     );
   }
 }
