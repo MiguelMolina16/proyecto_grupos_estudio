@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:proyecto_grupos_estudio/widgets/registro.dart';
 import 'package:proyecto_grupos_estudio/pantallaprincipal.dart';
 
 void main() {
@@ -75,7 +76,7 @@ class Aplicacion extends StatelessWidget {
           ),
         ),
       ),
-      home: const PantallaInicial(),
+      home: const Registro(),
     );
   }
 }
