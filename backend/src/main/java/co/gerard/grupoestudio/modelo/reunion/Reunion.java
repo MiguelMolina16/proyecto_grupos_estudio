@@ -34,7 +34,7 @@ public class Reunion extends PanacheEntityBase {
     @Column(name = "reu_descripcion")
     public String reuDescripcion;
 
-    @Column(name = "reu_creacion")
+    @Column(name = "reu_creacion", insertable = false, updatable = false)
     public LocalDateTime reuCreacion;
 
     // Método estático tipado

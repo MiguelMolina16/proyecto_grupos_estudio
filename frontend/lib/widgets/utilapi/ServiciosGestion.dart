@@ -5,6 +5,7 @@ import 'dart:async';
 
 import '../../modelos/usuario.dart';
 import '../../modelos/reunion.dart';
+import '../../modelos/grupo.dart';
 import '../../modelos/tarea.dart';
 import '../../modelos/estadistica.dart';
 
@@ -12,6 +13,69 @@ class ServiciosGestion {
   // final String apiUrl = 'http://localhost:8620/kick';
   final String apiUrl =
       'https://proyectogruposestudio-production.up.railway.app/kick';
+
+
+  // Consultar los grupos disponibles.
+  Future<List<Grupo>> getGrupos() async {
+    final url = Uri.parse('$apiUrl/grupos');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data
+          .map((item) => Grupo.fromJson(
+                item as Map<String, dynamic>,
+              ))
+          .toList();
+    }
+
+    throw Exception(
+      'Error al cargar grupos: ${response.statusCode}',
+    );
+  }
+
+  // Crear una reunión asociada a un grupo.
+  Future<String> crearReunion({
+    required String gruId,
+    required String fecha,
+    required String hora,
+    required String localizacion,
+    required String descripcion,
+  }) async {
+    final url = Uri.parse('$apiUrl/reuniones');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'gruId': gruId,
+          'reuFecha': fecha,
+          'reuHora': hora,
+          'reuLocalizacion': localizacion,
+          'reuDescripcion': descripcion,
+        }),
+      );
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201) {
+        return 'OK';
+      }
+
+      return 'No se pudo crear la reunión. '
+          'Código: ${response.statusCode}. ${response.body}';
+    } catch (_) {
+      return 'No se pudo conectar con el servidor.';
+    }
+  }
 
   FutureOr<List<Reunion>> getReuniones() async {
     final url = Uri.parse('$apiUrl/reuniones');
