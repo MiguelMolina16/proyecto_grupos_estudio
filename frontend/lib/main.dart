@@ -3,6 +3,7 @@ import 'package:proyecto_grupos_estudio/widgets/asistencia.dart';
 import 'package:proyecto_grupos_estudio/widgets/crear_reunion.dart';
 import 'package:proyecto_grupos_estudio/widgets/estadisticas_tareas.dart';
 import 'package:proyecto_grupos_estudio/widgets/registro.dart';
+import 'package:proyecto_grupos_estudio/widgets/grupo.dart';
 
 void main() {
   runApp(const Aplicacion());
@@ -42,6 +43,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     Asistencia(),
     EstadisticasTareasWidget(),
     CrearReunion(),
+    GrupoWidget(),
   ];
 
   @override
@@ -55,7 +57,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                   ? 'Registrar Asistencia'
                   : _index == 2
                       ? 'Tareas y Estadísticas'
-                      : 'Crear reunión',
+                      : _index == 3
+                          ? 'Crear reunión'
+                          : 'Crear grupo',
         ),
       ),
       body: _pantallas[_index],
@@ -79,6 +83,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           BottomNavigationBarItem(
             icon: Icon(Icons.event_available_outlined),
             label: 'Crear reunión',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group_add),
+            label: 'Crear grupo',
           ),
         ],
       ),
