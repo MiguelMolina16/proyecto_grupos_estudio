@@ -1,4 +1,3 @@
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -14,11 +13,9 @@ class ServiciosGestion {
   final String apiUrl =
       'https://proyectogruposestudio-production.up.railway.app/kick';
 
-
   // Consultar los grupos disponibles.
   Future<List<Grupo>> getGrupos() async {
     final url = Uri.parse('$apiUrl/grupos');
-
     final response = await http.get(
       url,
       headers: {
@@ -29,15 +26,11 @@ class ServiciosGestion {
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data
-          .map((item) => Grupo.fromJson(
-                item as Map<String, dynamic>,
-              ))
+          .map((item) => Grupo.fromJson(item as Map<String, dynamic>))
           .toList();
     }
 
-    throw Exception(
-      'Error al cargar grupos: ${response.statusCode}',
-    );
+    throw Exception('Error al cargar grupos: ${response.statusCode}');
   }
 
   // Crear una reunión asociada a un grupo.
@@ -65,13 +58,11 @@ class ServiciosGestion {
         }),
       );
 
-      if (response.statusCode == 200 ||
-          response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return 'OK';
       }
 
-      return 'No se pudo crear la reunión. '
-          'Código: ${response.statusCode}. ${response.body}';
+      return 'No se pudo crear la reunión. Código: ${response.statusCode}. ${response.body}';
     } catch (_) {
       return 'No se pudo conectar con el servidor.';
     }
@@ -79,7 +70,6 @@ class ServiciosGestion {
 
   FutureOr<List<Reunion>> getReuniones() async {
     final url = Uri.parse('$apiUrl/reuniones');
-
     final response = await http.get(
       url,
       headers: {
@@ -91,18 +81,13 @@ class ServiciosGestion {
       final List<dynamic> data = json.decode(response.body);
       return data.map((j) => Reunion.fromJson(j)).toList();
     } else {
-      throw Exception(
-        'Error al cargar reuniones: ${response.statusCode}',
-      );
+      throw Exception('Error al cargar reuniones: ${response.statusCode}');
     }
   }
 
   // Obtener los usuarios integrantes de una reunión.
   FutureOr<List<Usuario>> getIntegrantes(String reuId) async {
-    final url = Uri.parse(
-      '$apiUrl/asistencias/reunion/$reuId/integrantes',
-    );
-
+    final url = Uri.parse('$apiUrl/asistencias/reunion/$reuId/integrantes');
     final response = await http.get(
       url,
       headers: {
@@ -114,19 +99,13 @@ class ServiciosGestion {
       final List<dynamic> data = json.decode(response.body);
       return data.map((j) => Usuario.fromJson(j)).toList();
     } else {
-      throw Exception(
-        'Error al cargar integrantes: ${response.statusCode}',
-      );
+      throw Exception('Error al cargar integrantes: ${response.statusCode}');
     }
   }
 
   // Registrar asistencia de usuarios a una reunión.
-  FutureOr<String> registrarAsistencia(
-    String reuId,
-    List<String> usuIds,
-  ) async {
+  FutureOr<String> registrarAsistencia(String reuId, List<String> usuIds) async {
     final url = Uri.parse('$apiUrl/asistencias');
-
     final response = await http.post(
       url,
       headers: {
@@ -144,13 +123,11 @@ class ServiciosGestion {
 
     try {
       final err = json.decode(response.body);
-
       if (err is Map<String, dynamic>) {
         return err['message']?.toString() ??
             err['details']?.toString() ??
             'Error desconocido';
       }
-
       return 'Error: ${response.statusCode}';
     } catch (_) {
       return 'Error: ${response.statusCode}';
@@ -182,33 +159,26 @@ class ServiciosGestion {
         }),
       );
 
-      if (response.statusCode == 200 ||
-          response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return 'OK';
       }
 
       try {
         final error = jsonDecode(response.body);
-
         if (error is Map<String, dynamic>) {
           if (error['message'] != null) {
             return error['message'].toString();
           }
-
           if (error['details'] != null) {
             return error['details'].toString();
           }
-
           if (error['violations'] != null) {
             return error['violations'].toString();
           }
         }
-      } catch (_) {
-        // La respuesta no contiene JSON válido.
-      }
+      } catch (_) {}
 
-      return 'No se pudo registrar el usuario. '
-          'Código: ${response.statusCode}';
+      return 'No se pudo registrar el usuario. Código: ${response.statusCode}';
     } catch (_) {
       return 'No se pudo conectar con el servidor.';
     }
@@ -218,11 +188,8 @@ class ServiciosGestion {
   // MÉTODOS PARA TAREAS Y ESTADÍSTICAS
   // ==========================================
 
-  FutureOr<List<Tarea>> getTareasPorReunion(
-    String reuId,
-  ) async {
+  FutureOr<List<Tarea>> getTareasPorReunion(String reuId) async {
     final url = Uri.parse('$apiUrl/tareas/reunion/$reuId');
-
     final response = await http.get(
       url,
       headers: {
@@ -234,9 +201,7 @@ class ServiciosGestion {
       final List<dynamic> data = json.decode(response.body);
       return data.map((j) => Tarea.fromJson(j)).toList();
     } else {
-      throw Exception(
-        'Error al cargar tareas: ${response.statusCode}',
-      );
+      throw Exception('Error al cargar tareas: ${response.statusCode}');
     }
   }
 
@@ -246,7 +211,6 @@ class ServiciosGestion {
     String descripcion,
   ) async {
     final url = Uri.parse('$apiUrl/tareas');
-
     final response = await http.post(
       url,
       headers: {
@@ -259,32 +223,25 @@ class ServiciosGestion {
       }),
     );
 
-    if (response.statusCode == 200 ||
-        response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return 'OK';
     }
 
     try {
       final err = json.decode(response.body);
-
       if (err is Map<String, dynamic>) {
         return err['error']?.toString() ??
             err['message']?.toString() ??
             'Error al crear tarea';
       }
-
       return 'Error al crear tarea';
     } catch (_) {
       return 'Error: ${response.statusCode}';
     }
   }
 
-  FutureOr<String> cambiarEstadoTarea(
-    String tarId,
-    bool completada,
-  ) async {
+  FutureOr<String> cambiarEstadoTarea(String tarId, bool completada) async {
     final url = Uri.parse('$apiUrl/tareas/$tarId/estado');
-
     final response = await http.put(
       url,
       headers: {
@@ -298,7 +255,6 @@ class ServiciosGestion {
     if (response.statusCode == 200) {
       return 'OK';
     }
-
     return 'Error al actualizar tarea: ${response.statusCode}';
   }
 
@@ -306,10 +262,7 @@ class ServiciosGestion {
     String gruId,
     String usuId,
   ) async {
-    final url = Uri.parse(
-      '$apiUrl/estadisticas/$gruId/$usuId',
-    );
-
+    final url = Uri.parse('$apiUrl/estadisticas/$gruId/$usuId');
     final response = await http.get(
       url,
       headers: {
@@ -318,13 +271,42 @@ class ServiciosGestion {
     );
 
     if (response.statusCode == 200) {
-      return EstadisticaParticipacion.fromJson(
-        json.decode(response.body),
-      );
+      return EstadisticaParticipacion.fromJson(json.decode(response.body));
     } else {
-      throw Exception(
-        'Error al cargar estadísticas: ${response.statusCode}',
-      );
+      throw Exception('Error al cargar estadísticas: ${response.statusCode}');
+    }
+  }
+
+  // ==========================================
+  // MÉTODO PARA CREAR GRUPOS (HU003)
+  // ==========================================
+  FutureOr<String> crearGrupo(String nombre, String descripcion) async {
+    final url = Uri.parse('$apiUrl/grupos');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'gruNombre': nombre,
+        'gruDescripcion': descripcion,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return 'OK';
+    }
+
+    try {
+      final err = json.decode(response.body);
+      if (err is Map<String, dynamic>) {
+        return err['error']?.toString() ??
+            err['message']?.toString() ??
+            'Error desconocido';
+      }
+      return 'Error: ${response.statusCode}';
+    } catch (_) {
+      return 'Error: ${response.statusCode}';
     }
   }
 }

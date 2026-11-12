@@ -134,7 +134,7 @@ class _GrupoWidgetState extends State<GrupoWidget> {
                   child: ListTile(
                     leading: const Icon(Icons.group),
                     title: Text(g.gruNombre),
-                    subtitle: Text(g.gruDescripcion),
+                    subtitle: Text(g.gruDescripcion ?? 'Sin descripción'),
                   ),
                 )),
         ],
