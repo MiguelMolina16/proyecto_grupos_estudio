@@ -4,6 +4,7 @@ import 'package:proyecto_grupos_estudio/widgets/crear_reunion.dart';
 import 'package:proyecto_grupos_estudio/widgets/estadisticas_tareas.dart';
 import 'package:proyecto_grupos_estudio/widgets/registro.dart';
 import 'package:proyecto_grupos_estudio/widgets/grupo.dart';
+import 'package:proyecto_grupos_estudio/widgets/consultar_reuniones_fecha.dart';
 
 void main() {
   runApp(const Aplicacion());
@@ -44,6 +45,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     EstadisticasTareasWidget(),
     CrearReunion(),
     GrupoWidget(),
+    ConsultarReunionesFecha(), // <-- Nueva pantalla de tu compañera
   ];
 
   @override
@@ -59,7 +61,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                       ? 'Tareas y Estadísticas'
                       : _index == 3
                           ? 'Crear reunión'
-                          : 'Crear grupo',
+                          : _index == 4
+                              ? 'Crear grupo'
+                              : 'Consultar reuniones',
         ),
       ),
       body: _pantallas[_index],
@@ -68,26 +72,12 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         onTap: (i) => setState(() => _index = i),
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_add),
-            label: 'Registro',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.how_to_reg),
-            label: 'Asistencia',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Tareas/Stats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_available_outlined),
-            label: 'Crear reunión',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_add),
-            label: 'Crear grupo',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Registro'),
+          BottomNavigationBarItem(icon: Icon(Icons.how_to_reg), label: 'Asistencia'),
+          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Tareas/Stats'),
+          BottomNavigationBarItem(icon: Icon(Icons.event_available_outlined), label: 'Crear reunión'),
+          BottomNavigationBarItem(icon: Icon(Icons.group_add), label: 'Crear grupo'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Consultar reuniones'), // <-- Nueva pestaña
         ],
       ),
     );
