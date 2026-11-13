@@ -13,7 +13,7 @@ class ConsultarReunionesFechaWidget extends StatefulWidget {
 class _ConsultarReunionesFechaWidgetState
     extends State<ConsultarReunionesFechaWidget> {
   final ServiciosGestion _api = ServiciosGestion();
-  List<Map<String, dynamic>> _grupos = [];
+  List<Grupo> _grupos = [];
   List<Reunion> _reuniones = [];
   String? _grupoSeleccionado;
   DateTime? _fechaInicio;

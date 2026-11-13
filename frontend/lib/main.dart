@@ -45,7 +45,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     EstadisticasTareasWidget(),
     CrearReunion(),
     GrupoWidget(),
-    ConsultarReunionesFecha(), // <-- Nueva pantalla de tu compañera
+    ConsultarReunionesFechaWidget(), // <-- Nueva pantalla de tu compañera
   ];
 
   @override
