@@ -85,6 +85,24 @@ class ServiciosGestion {
     }
   }
 
+  // NUEVO MÉTODO: Consultar reuniones por fecha y grupo.
+  FutureOr<List<Reunion>> getReunionesPorFecha(String gruId, String fecha) async {
+    final url = Uri.parse('$apiUrl/reuniones/grupo/$gruId/fecha/$fecha');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((j) => Reunion.fromJson(j)).toList();
+    } else {
+      throw Exception('Error al cargar reuniones por fecha: ${response.statusCode}');
+    }
+  }
+
   // Obtener los usuarios integrantes de una reunión.
   FutureOr<List<Usuario>> getIntegrantes(String reuId) async {
     final url = Uri.parse('$apiUrl/asistencias/reunion/$reuId/integrantes');
@@ -310,16 +328,3 @@ class ServiciosGestion {
     }
   }
 }
-  FutureOr<List<Reunion>> getReunionesPorFecha(String gruId, String fecha) async {
-    final url = Uri.parse('$apiUrl/reuniones/grupo/$gruId/fecha/$fecha');
-    final response = await http.get(
-      url,
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.map((j) => Reunion.fromJson(j)).toList();
-    } else {
-      throw Exception('Error al cargar reuniones por fecha: ${response.statusCode}');
-    }
-  }
